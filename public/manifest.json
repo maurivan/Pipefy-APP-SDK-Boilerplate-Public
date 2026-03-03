@@ -1,0 +1,31 @@
+{
+  "short_name": "My App",
+  "name": "My App",
+  "icons": [
+    {
+      "src": "./icons/MyLogo.png",
+      "sizes": "34x34",
+      "type": "image/png"
+    }
+  ],
+  "init_url": "./",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "short_description": {
+    "en": "A simple Pipefy App template to get you started.",
+    "pt-BR": "Um modelo simples de aplicativo Pipefy para você começar.",
+    "es": "Un modelo simple de aplicación Pipefy para que comiences."
+  },
+  "description": {
+    "en": "This is the description of your App.",
+    "pt-BR": "Essa é a descrição do seu aplicativo.",
+    "es": "Esta es la descripción de tu aplicación."
+  },
+  "icon": "./icons/MyLogo.png",
+  "screenshots": {
+    "en": ["./screenshots/screenshot.png"],
+    "pt-BR": ["./screenshots/screenshot.png"],
+    "es": ["./screenshots/screenshot.png"]
+  }
+}

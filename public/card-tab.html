@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Pipefy App</title>
+  <link rel="stylesheet" href="https://app.pipefy.com/apps/style.css" />
+  <style>
+    body { 
+      padding: 20px; 
+      
+      margin: 0;
+      font-family: sans-serif; 
+      background-color: #b3caec; 
+      overflow: hidden; /* Prevents scrollbars during resize */
+    }
+
+    /* 2. Use min-height instead of 100vh */
+    #card-tab { 
+      display: flex; /* Keep hidden until render fires  */
+      flex-direction: column; 
+      justify-content: center; 
+      align-items: center; 
+      height: 900px; /* Set a large height to ensure it fills the card */
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="card-tab">
+      <h2 style="color: #081b79; margin-top: 0;">App Loaded Successfully</h2>
+      <div>
+        <p>This UI is now synchronized with the Pipefy SDK.</p>
+      </div>
+  </div>
+ 
+  <script src="https://platform.staticpipefy.com/pipefy-app.js"></script>
+
+  <script>
+      // Initialize the SDK
+      const p = PipefyApp.init();
+
+      // 1. Render the page and perform the handshake
+      PipefyApp.render(function () {
+
+        // Now tell Pipefy to resize the iframe to match the div
+        PipefyApp.resizeTo('#card-tab');
+        
+      });
+  </script>
+</body>
+</html>

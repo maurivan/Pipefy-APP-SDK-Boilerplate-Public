@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Pipefy App</title>
+  <link rel="stylesheet" href="https://app.pipefy.com/apps/style.css" />
+  <style>
+    body { padding: 20px; height: 100%; width: 100%; font-family: sans-serif; background-color: #b3caec; }
+    #content { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; } /* Hidden until Pipefy is ready */
+
+  </style>
+</head>
+<body>
+  <div id="content" >
+      <h2 style="color: #081b79; margin-top: 0;">App Loaded Successfully</h2>
+    <div >
+        <p>This UI is now synchronized with the Pipefy SDK.</p>
+
+      </div>
+  </div>
+ 
+  <script src="https://platform.staticpipefy.com/pipefy-app.js"></script>
+
+  <script>
+    
+      // 1. Initialize
+      const p = PipefyApp.init();
+
+      // 2. Render the page
+      PipefyApp.render(() => {});
+
+  
+  </script>
+</body>
+</html>
