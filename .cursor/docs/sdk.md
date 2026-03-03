@@ -352,6 +352,8 @@ References: [Bluebird](http://bluebirdjs.com/docs/getting-started.html), [MDN Pr
 
 Calls use the authenticated user’s permissions.
 
+**App context:** `p.app.pipeId` — ID of the current pipe; always numeric (number or numeric string). Use it in GraphQL `pipe(id: ...)` and in mutations (e.g. `pipe_id` in `createCard`).
+
 ### p.query(query, variables)
 
 Runs a GraphQL **query**.
@@ -381,6 +383,7 @@ p.query(cardTitleQuery).then(function(result) {
 });
 
 // With variables (e.g. app pipeId)
+// Note: p.app.pipeId is always numeric (number or numeric string). Use it as the pipe identifier in GraphQL.
 const pipeNameQuery = `
   query PipeName($pipeId: ID!) {
     pipe(id: $pipeId) {
