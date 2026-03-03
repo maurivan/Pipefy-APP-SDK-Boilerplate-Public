@@ -1,62 +1,90 @@
 ---
-description:
+description: Create a Pipefy App from a short prompt (e.g. "visão em gantt"). Uses SDK, pipe-frontend and pipe-dev skills.
 globs:
 alwaysApply: false
 ---
-# Rule: Generating a Product Requirements Document (PRD)
+
+# Command: Create Pipefy App
+
+## Trigger
+
+The user invokes this command with a **prompt** describing the app they want, for example:
+
+- `/create-app visão em gantt`
+- `/create-app checklist no card`
+- `/create-app botão no pipe que abre um modal`
+
+**Input:** Everything after `/create-app` is the **user prompt** (the app idea). Use it as the single source of intent for what to build.
+
+---
 
 ## Goal
 
-To guide an AI assistant in creating a detailed Product Requirements Document (PRD) in Markdown format, based on an initial user prompt. The PRD should be clear, actionable, and suitable for a junior developer to understand and implement the feature.
+Create a working Pipefy App that implements the idea described in the user prompt, using the **Pipefy Apps SDK**, following **Frontend/Design** and **Development** standards defined in the project skills.
+
+---
+
+## Mandatory References (priority order)
+
+1. **SDK documentation (first)** — Read and follow strictly:
+   - **`.cursor/docs/sdk.md`** — Pipefy Apps SDK: loading script, `manifest.json`, `init_url`, `PipefyApp.initCall()`, `pipe-view`, `card-tab`, `PipefyApp.init()`, `PipefyApp.render()`, `PipefyApp.resizeTo()`, and the `p` API. All app structure and SDK usage must match this document.
+
+2. **Frontend & Design (second)** — Apply for all UI and markup:
+   - **`.cursor/skills/pipe-frontend/SKILL.md`** — PipeStyle, Lumen tokens, Tailwind, New Order font, enterprise UI, no generic AI aesthetics. Use for layout, components, and visual consistency.
+
+3. **Development (third)** — Apply for architecture and patterns:
+   - **`.cursor/skills/pipe-dev/SKILL.md`** — Separation between SDK (client) and API (data), initialization, context, and senior dev guidelines. Use for structure, security, and integration with Pipefy.
+
+Always prioritize **SDK doc** and **frontend skill** when there is any overlap or doubt.
+
+---
 
 ## Process
 
-1.  **Receive Initial Prompt:** The user provides a brief description or request for a new feature or functionality.
-2.  **Ask Clarifying Questions:** Before writing the PRD, the AI *must* ask clarifying questions to gather sufficient detail. The goal is to understand the "what" and "why" of the feature, not necessarily the "how" (which the developer will figure out).
-3.  **Generate PRD:** Based on the initial prompt and the user's answers to the clarifying questions, generate a PRD using the structure outlined below.
-4.  **Save PRD:** Save the generated document as `prd-[feature-name].md` inside the `/.cursor/planning/prd` directory.
+1. **Parse the user prompt**  
+   Treat the full text after `/create-app` as the app idea (e.g. "visão em gantt" → an app that shows a Gantt view).
 
-## Clarifying Questions (Examples)
+2. **Clarify if needed**  
+   If the idea is too vague, ask exactly one short question to narrow scope (e.g. "Deve aparecer como aba no card, view no pipe, ou os dois?"). If it’s clear enough, do not ask.
 
-The AI should adapt its questions based on the prompt, but here are some common areas to explore:
+3. **Design the app shape from the SDK**  
+   Using **only** `.cursor/docs/sdk.md`:
+   - Decide where the app appears: **pipe-view**, **card-tab**, or both (and pipe-buttons/card-buttons if relevant).
+   - Plan the init page: `init_url` → `public/index.html` + `public/index.js` with `PipefyApp.initCall({ 'pipe-view': ... }, { 'card-tab': ... })`.
+   - Plan view/tab pages: `PipefyApp.init()`, `PipefyApp.render()`, and for card-tab `PipefyApp.resizeTo()`.
 
-*   **Problem/Goal:** "What problem does this feature solve for the user?" or "What is the main goal we want to achieve with this feature?"
-*   **Target User:** "Who is the primary user of this feature?"
-*   **Core Functionality:** "Can you describe the key actions a user should be able to perform with this feature?"
-*   **User Stories:** "Could you provide a few user stories? (e.g., As a [type of user], I want to [perform an action] so that [benefit].)"
-*   **Acceptance Criteria:** "How will we know when this feature is successfully implemented? What are the key success criteria?"
-*   **Scope/Boundaries:** "Are there any specific things this feature *should not* do (non-goals)?"
-*   **Data Requirements:** "What kind of data does this feature need to display or manipulate?"
-*   **Design/UI:** "Are there any existing design mockups or UI guidelines to follow?" or "Can you describe the desired look and feel?"
-*   **Edge Cases:** "Are there any potential edge cases or error conditions we should consider?"
+4. **Implement**  
+   - **Manifest:** Update `public/manifest.json` (name, description, icons, screenshots) to match the new app.
+   - **Init:** Implement or adjust `public/index.html` and `public/index.js` (initCall, feature config).
+   - **Views:** Implement or adjust `public/pipe-view.html` and/or `public/card-tab.html` (and extra pages if needed).
+   - **UI:** Follow **pipe-frontend** skill: Lumen tokens, Tailwind mapped to tokens, New Order font, enterprise look, no hardcoded brand colors, no generic AI aesthetics.
+   - **Logic:** Follow **pipe-dev** skill: use SDK for context and UI (modal, sidebar, notifications); use API only when SDK is not enough; assume existing session. **Authentication:** never create `.env` or `.env.example` files to configure a Pipefy token; always use the session/cookie provided by the SDK (the user is already authenticated in Pipefy; API calls must use the context/session provided by the SDK).
+   * **Existing Session:** Assume the user is already authenticated. Do not implement new login flows or credential prompts.
+   * **Token/Cookie Persistence:** Ensure all API requests utilize the existing Pipefy session tokens or cookies available in the environment/browser context to maintain authorized access.
 
-## PRD Structure
+5. **Deliver**  
+   Produce or update the files under `public/` (and manifest) so the app runs with `npm start` and can be registered at [app.pipefy.com/developers/apps](https://app.pipefy.com/developers/apps). Do not create PRDs or separate planning docs unless the user explicitly asks.
 
-The generated PRD should include the following sections:
+6. **Run the app (required)**  
+   Always after completing the implementation, run in the terminal:
+   - `npm install` — install dependencies.
+   - `npm start` — start the server so the user can test the app.
 
-1.  **Introduction/Overview:** Briefly describe the feature and the problem it solves. State the goal.
-2.  **Goals:** List the specific, measurable objectives for this feature.
-3.  **User Stories:** Detail the user narratives describing feature usage and benefits.
-4.  **Functional Requirements:** List the specific functionalities the feature must have. Use clear, concise language (e.g., "The system must allow users to upload a profile picture."). Number these requirements.
-5.  **Non-Goals (Out of Scope):** Clearly state what this feature will *not* include to manage scope.
-6.  **Design Considerations (Optional):** Link to mockups, describe UI/UX requirements, or mention relevant components/styles if applicable.
-7.  **Technical Considerations (Optional):** Mention any known technical constraints, dependencies, or suggestions (e.g., "Should integrate with the existing Auth module").
-8.  **Success Metrics:** How will the success of this feature be measured? (e.g., "Increase user engagement by 10%", "Reduce support tickets related to X").
-9.  **Open Questions:** List any remaining questions or areas needing further clarification.
+---
 
-## Target Audience
+## Constraints
 
-Assume the primary reader of the PRD is a **junior developer**. Therefore, requirements should be explicit, unambiguous, and avoid jargon where possible. Provide enough detail for them to understand the feature's purpose and core logic.
+- Do not invent SDK methods or manifest fields; use only what is described in **`.cursor/docs/sdk.md`** (and official links there if needed).
+- Do not skip the frontend skill: all UI must use Lumen tokens and PipeStyle guidance from **`.cursor/skills/pipe-frontend/SKILL.md`**.
+- Keep the existing server and project layout: app lives in `public/`, entry is the init page, views/tabs are HTML (and JS/CSS) as in the boilerplate.
+- **Do not create `.env` or `.env.example`** files to configure a Pipefy token. Always use the session/cookie provided by the SDK (user is already authenticated in Pipefy).
 
-## Output
+---
 
-*   **Format:** Markdown (`.md`)
-*   **Location:** `/.cursor/planning/prd/`
-*   **Filename:** `prd-[feature-name].md`
+## Example (for the AI)
 
-## Final instructions
+**User:** `/create-app visão em gantt`
 
-1. Do NOT start implementing the PRD
-2. Make sure to ask the user clarifying questions
-3. Take the user's answers to the clarifying questions and improve the PRD
-4. Give the user an option to start the implementation using the current PRD suggestion
+**Interpretation:** Build an app that shows a Gantt view (e.g. of cards/phases or dates). Decide whether it’s pipe-view, card-tab, or both from the SDK doc. Use initCall to register the feature(s). Implement the view(s) with PipefyApp.init(), render(), and resizeTo() for card-tab. Style with Lumen + Tailwind per pipe-frontend. Use pipe-dev for context and API usage if needed.
+
+Then implement the files under `public/` and update the manifest accordingly.

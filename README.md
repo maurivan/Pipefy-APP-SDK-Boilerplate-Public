@@ -65,8 +65,13 @@ Template to build Pipefy Apps that run inside Pipefy (pipe views, card tabs, etc
 | **public/card-tab.html** | Page shown when the app is opened as a **card tab**. Uses Pipefy SDK; layout is adapted for the card panel. |
 | **public/icons/** | App icons (e.g. `MyLogo.png`). Referenced in `manifest.json`. |
 | **public/screenshots/** | Screenshots for the Pipefy app listing (e.g. `screenshot.png`). Referenced in `manifest.json`. |
+| **docs/sdk.md** | Pipefy Apps SDK documentation: script loading, initCall, pipe-view, card-tab, render, resizeTo, and the `p` API. |
 
 ---
+
+## Documentation
+
+- **[docs/sdk.md](docs/sdk.md)** — Pipefy Apps SDK reference: loading the SDK, `initCall`, pipe-view, card-tab, `PipefyApp.init()` / `render()` / `resizeTo()`, and the `p` API (data, UI, context). Use it when implementing or extending app features.
 
 ## Requirements
 

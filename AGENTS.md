@@ -24,7 +24,8 @@ npm start                               # Start Server
 ### 1. Product & Architecture (Read First)
 - **Pipefy App**: definition and screens in `public/manifest.json`, `public/index.html`, `public/pipe-view.html`, `public/card-tab.html`.
 - **Cursor command**: `.cursor/commands/create-app.md` — workflow for app development.
-- **Skills**: `.cursor/skills/pipe-dev/SKILL.md` (dev), `.cursor/skills/pipe-frontend/SKILL.md` (UI/Design System).
+- **Skills**: `.cursor/skills/pipe-dev/SKILL.md` (developer), `.cursor/skills/pipe-frontend/SKILL.md` (UI/Design System).
+- **SDK documentation**: `docs/sdk.md` — Pipefy Apps SDK reference (initCall, pipe-view, card-tab, render, resizeTo, `p` API).
 
 ## Organization
 
@@ -36,6 +37,8 @@ Pipefy-APP-SDK-Boilerplate-main/
 ├── package-lock.json
 ├── AGENTS.md                 # Context for AI agents (reference)
 ├── .gitignore
+├── docs/
+│   └── sdk.md                # Pipefy Apps SDK documentation
 │
 ├── public/                   # Static frontend (served by Express)
 │   ├── index.html            # Main app page
