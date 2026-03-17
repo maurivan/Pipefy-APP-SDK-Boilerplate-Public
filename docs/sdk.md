@@ -1,18 +1,21 @@
-# Pipefy Apps SDK — Developer reference
+# Pipefy Apps Client SDK — Referência
 
-This document summarizes the **Pipefy Apps Client SDK** used to build apps that run inside Pipefy (pipe views, card tabs, pipe/card buttons, etc.). For the official portal, see [Pipefy Developers](https://developers.pipefy.com/) and [Build your first Pipefy app](https://developers.pipefy.com/docs/build-your-first-pipefy-app).
+> Referência consolidada para Cursor (skills/knowledge-base) e Claude (rules).  
+> Fonte: [Pipefy Developers](https://developers.pipefy.com/docs/) — Apps Client SDK v1.
 
 ---
 
-## 1. Loading the SDK
+## 1. Introdução e carregamento do SDK
 
-Include the client script on every page that needs to talk to Pipefy. The SDK exposes a global `PipefyApp` object and enables cross-frame communication between your app and the platform.
+O **Client SDK** permite interagir com o framework Pipefy Apps a partir do seu iframe. Expõe o objeto global `PipefyApp`.
+
+### Carregar o SDK
 
 ```html
 <script src="https://platform.staticpipefy.com/pipefy-app.js"></script>
 ```
 
-Optional: use Pipefy’s app styles for consistent UI:
+Opcional: estilos do app para UI consistente:
 
 ```html
 <link rel="stylesheet" href="https://app.pipefy.com/apps/style.css" />
@@ -20,31 +23,31 @@ Optional: use Pipefy’s app styles for consistent UI:
 
 ---
 
-## 2. App entry and manifest
+## 2. Entrada do app e manifest
 
-- Your app is defined by a **manifest** at a URL you register in [app.pipefy.com/developers/apps](https://app.pipefy.com/developers/apps).
-- The manifest’s **`init_url`** is the first page Pipefy loads in an iframe (e.g. `./` or `./index.html`).
-- On that page you **must** load `pipefy-app.js` and call **`PipefyApp.initCall()`** to register which features your app provides (pipe-view, card-tab, pipe-buttons, etc.).
+- O app é definido por um **manifest** em uma URL registrada em [app.pipefy.com/developers/apps](https://app.pipefy.com/developers/apps).
+- O **`init_url`** do manifest é a primeira página que o Pipefy carrega no iframe (ex.: `./` ou `./index.html`).
+- Nessa página é **obrigatório** carregar `pipefy-app.js` e chamar **`PipefyApp.initCall()`** para registrar as features (pipe-view, card-tab, pipe-buttons, etc.).
 
-See [Manifest reference](https://developers.pipefy.com/docs/manifestjson) for all manifest properties (`name`, `short_description`, `description`, `icon`, `init_url`, `screenshots`, `features`, etc.).
+Ver [Manifest reference](https://developers.pipefy.com/docs/manifestjson) para todas as propriedades.
 
 ---
 
-## 3. Registering features: `PipefyApp.initCall()`
+## 3. Registrar features: `PipefyApp.initCall()`
 
-On the **init** page (the one pointed by `init_url`), call `PipefyApp.initCall()` with an object that maps feature names to handler functions. Each handler receives `(p, pipe)` and returns the configuration for that feature.
+Na página **init** (apontada por `init_url`), chame `PipefyApp.initCall()` com um objeto que mapeia nomes de feature para funções. Cada handler recebe `(p, pipe)` e retorna a configuração da feature.
 
 ### 3.1 Pipe view (`pipe-view`)
 
-Registers a view available at pipe level (e.g. a dedicated tab or button that opens a full view). Return an object with:
+Registra uma view no nível do pipe. Retorne um objeto com:
 
-| Property | Description |
-|----------|-------------|
-| `icon`   | URL to the button/entry icon (e.g. `./icons/MyLogo.png`) |
-| `text`   | Label (e.g. `"My Pipefy App"`) |
-| `url`    | URL of the page that implements the view (e.g. `./pipe-view.html`) |
+| Propriedade | Descrição |
+|-------------|-----------|
+| `icon` | URL do ícone (ex.: `./icons/MyLogo.png`) |
+| `text` | Label (ex.: `"My Pipefy App"`) |
+| `url` | URL da página da view (ex.: `./pipe-view.html`) |
 
-Example (from this boilerplate):
+Exemplo:
 
 ```javascript
 PipefyApp.initCall({
@@ -60,16 +63,16 @@ PipefyApp.initCall({
 
 ### 3.2 Card tab (`card-tab`)
 
-Adds a tab inside the card. Return an object with:
+Adiciona uma aba dentro do card. Retorne um objeto com:
 
-| Property | Description |
-|----------|-------------|
-| `title`  | Tab title shown in the card |
-| `icon`   | URL to the tab icon |
-| `url`    | URL of the page that renders the tab content (e.g. `./card-tab.html`) |
-| `buttons`| Optional array of footer buttons (e.g. `[{ text: 'Save', callback: fn }]`) |
+| Propriedade | Descrição |
+|-------------|-----------|
+| `title` | Título da aba |
+| `icon` | URL do ícone da aba |
+| `url` | URL da página da aba (ex.: `./card-tab.html`) |
+| `buttons` | Opcional: array de botões no rodapé |
 
-Example:
+Exemplo:
 
 ```javascript
 PipefyApp.initCall({
@@ -84,79 +87,227 @@ PipefyApp.initCall({
 });
 ```
 
-### 3.3 Other features (pipe-buttons, card-buttons, card-badges)
+### 3.3 Outras features (pipe-buttons, card-buttons, card-badges)
 
-- **`pipe-buttons`**: handler returns an **array** of buttons at pipe level. Each item: `icon`, `text`, `url` (and optional `target`, e.g. `'blank'`) or `callback`.
-- **`card-buttons`** / **`card-badges`**: similar idea at card level. Declare the features you use in `manifest.json` under `features` (e.g. `["pipe-view", "card-tab"]`).
+- **`pipe-buttons`**: handler retorna um **array** de botões no pipe. Cada item: `icon`, `text`, `url` (e opcional `target`, ex. `'blank'`) ou `callback`.
+- **`card-buttons`** / **`card-badges`**: mesma ideia no nível do card. Declare as features em `manifest.json` em `features` (ex.: `["pipe-view", "card-tab"]`).
 
 ---
 
-## 4. Inside a view or card-tab page: init, render, resize
+## 4. Dentro de uma view ou card-tab: init, render, resize
 
-On pages loaded as **pipe-view** or **card-tab** (or similar), you typically:
+Nas páginas carregadas como **pipe-view** ou **card-tab**:
 
-1. **Initialize** the SDK to get the `p` API object.
-2. **Render** when Pipefy is ready (so the iframe is visible and context is available).
-3. **Resize** (especially in card-tab) so the iframe height matches your content.
+1. **Inicializar** o SDK para obter o objeto `p`.
+2. **Render** quando o Pipefy estiver pronto (iframe visível, contexto disponível).
+3. **Resize** (principalmente em card-tab) para a altura do iframe acompanhar o conteúdo.
 
-### 4.1 Initialize
+### 4.1 Inicializar
 
 ```javascript
 const p = PipefyApp.init();
 ```
 
-`p` is the SDK instance used for data and UI (e.g. `p.card()`, `p.pipe()`, `p.set()`, `p.modal()`).
+`p` é a instância do SDK (dados e UI: `p.card()`, `p.pipe()`, `p.set()`, `p.modal()`, etc.).
 
-### 4.2 Render (when Pipefy is ready)
+### 4.2 Render (quando o Pipefy estiver pronto)
 
-Wrap your UI logic in `PipefyApp.render()` so it runs after the handshake with Pipefy:
+Envolva a lógica da UI em `PipefyApp.render()` para rodar após o handshake com o Pipefy:
 
 ```javascript
 PipefyApp.render(function () {
-  // Safe to use DOM and SDK here
+  // Seguro usar DOM e SDK aqui
 });
 ```
 
 ### 4.3 Resize (card-tab)
 
-In a **card-tab** iframe, tell Pipefy to resize the iframe to match a given element so the tab doesn’t show a fixed small height:
+No iframe de **card-tab**, informe ao Pipefy para redimensionar o iframe conforme um elemento:
 
 ```javascript
 PipefyApp.render(function () {
-  PipefyApp.resizeTo('#card-tab');  // selector of the main content container
+  PipefyApp.resizeTo('#card-tab');  // seletor do container principal
 });
 ```
 
-Use a container with enough height (or min-height) so the content fits; the iframe will expand accordingly.
+---
+
+## 5. Dados do Pipefy
+
+As funções abaixo retornam **Promise** (exceto `p.locale`, síncrono).
+
+### p.card()
+
+Retorna uma Promise com o card atual no contexto.
+
+```javascript
+p.card().then(function(card) {
+  console.log(card); // { id: '23abc', ... }
+});
+```
+
+### p.fields()
+
+Retorna os campos do pipe atual.
+
+```javascript
+p.fields().then((fields) => {
+  console.log(fields); // [{ id: "title", ... }]
+});
+```
+
+### p.pipe()
+
+Retorna os atributos do pipe atual.
+
+### p.cardAttachments()
+
+Retorna anexos do card adicionados via `p.attach()`.
+
+### p.timezone()
+
+Retorna o timezone do usuário (nome tz database).
+
+### p.locale
+
+Propriedade síncrona com o locale do usuário (ex.: `pt-br`, `en`, `es`).
+
+```javascript
+const locale = p.locale;
+```
 
 ---
 
-## 5. SDK instance `p` — data and UI (overview)
+## 6. Armazenar e recuperar dados customizados
 
-The object returned by `PipefyApp.init()` provides APIs for data and UI. Typical methods (names may vary by SDK version; check the client script or community docs):
+### p.set(scope, visibility, key, value)
 
-| Area   | Methods (examples) | Description |
-|--------|---------------------|-------------|
-| Data   | `p.card()`, `p.pipe()`, `p.fields()` | Current card, pipe, fields |
-| Storage| `p.set()`, `p.get()` | Persist data scoped to card/pipe/org |
-| Attachments | `p.attach()`, `p.detach()` | Manage card attachments |
-| UI    | `p.modal()`, `p.sidebar()`, `p.dropdown()`, `p.search()` | Open modal, sidebar, dropdown, search |
-| Card  | `p.openCard()`, `p.closeCard()` | Control card display |
-| Notify| `p.showNotification()` | Show in-app notification |
-| Context | `p.timezone()`, `p.locale` | User timezone and locale |
+Armazena dados no Pipefy com escopo `card`, `pipe` ou `organization`.
 
-For the exact API of your SDK version, see [Apps Client SDK (Community)](https://community.pipefy.com/customs-apps-integrations-75/apps-client-sdk-916) and the official [Pipefy Developers](https://developers.pipefy.com/) docs.
+| Scope | Descrição |
+|-------|-----------|
+| organization | Dados disponíveis para todos os pipes da organização. |
+| pipe | Dados do pipe; outros pipes não acessam. |
+| card | Dados do card; outros cards/pipes não acessam. |
+
+| Visibility | Descrição |
+|------------|-----------|
+| private | Apenas o usuário atual. |
+| public | Outros usuários podem acessar. |
+
+### p.get(scope, visibility, key)
+
+Recupera dados armazenados pelo app.
+
+### p.attach({ url, name })
+
+Anexa um link ao card.
+
+### p.detach(id)
+
+Remove um link do card (apenas anexos que o próprio app adicionou).
 
 ---
 
-## 6. Security and hosting
+## 7. Interface (UI)
 
-- Your app runs in **iframes** and must be served over **HTTPS** when used in Pipefy (required for iframes in production).
-- For local development, use a tunnel (e.g. ngrok, localtunnel) and point the app and manifest URLs in [app.pipefy.com/developers/apps](https://app.pipefy.com/developers/apps) to that HTTPS URL.
+### Sidebar
+
+- **p.sidebar({ title, url })** — Abre sidebar com título e URL do iframe.
+- **p.closeSidebar()** — Fecha a sidebar.
+
+### Modal
+
+- **p.modal({ url, width, height })** — Abre modal. `width` e `height` em pixels ou porcentagem.
+- **p.closeModal()** — Fecha o modal.
+- Para redimensionar depois: `PipefyApp.resizeTo(selector)`.
+
+### Card
+
+- **p.openCard(id)** — Abre o card pelo ID.
+- **p.closeCard()** — Fecha o card atual.
+
+### Dropdown
+
+- **p.dropdown(options)** — Abre dropdown. Opções: `title`, `items` (array com `title` e `callback`) ou `url` (iframe), e opcionalmente `height`.
+- **p.closeDropdown()** — Fecha o dropdown.
+
+### Search
+
+**p.search(options)** — Abre dropdown de busca. Parâmetros: `items` (função `(p, query)` que retorna Promise de array `{ title, callback }`), `loading`, `empty`, `placeholder`, `title`.
+
+### Notificação
+
+**p.showNotification(text, type)** — Notificação in-app. `type`: `'success'` ou `'error'`.
+
+### PipefyApp.render(callback)
+
+O callback roda no ciclo de render da view. Usar com moderação; API pode mudar.
+
+### PipefyApp.resizeTo(selector)
+
+Redimensiona o iframe (dropdown/modal) para as dimensões do elemento indicado.
 
 ---
 
-## 7. References
+## 8. Autenticação (comunidade)
+
+### p.getAuthToken()
+
+Retorna uma **Promise** com o token de autenticação do usuário. Útil para integrar clientes HTTP/GraphQL externos (ex.: Apollo Client) usando credenciais Pipefy. Confirmado na comunidade (ex.: app Calendar).
+
+---
+
+## 9. Chamadas de API (GraphQL)
+
+As chamadas usam as permissões do usuário autenticado.
+
+**Contexto do app:** `p.app.pipeId` — ID do pipe atual; sempre numérico. Use em GraphQL `pipe(id: ...)` e em mutations (ex.: `pipe_id` em `createCard`).
+
+### p.query(query, variables)
+
+Executa uma **query** GraphQL. Retorna Promise com `data` e/ou `errors`.
+
+### p.mutation(mutation, variables)
+
+Executa uma **mutation** GraphQL.
+
+---
+
+## 10. Promises
+
+A comunicação entre o app e o Pipefy usa Promises. O SDK inclui **Bluebird**:
+
+```javascript
+var Promise = PipefyApp.Promise;
+```
+
+---
+
+## Referência rápida
+
+| Categoria | Principais funções |
+|-----------|---------------------|
+| Dados | `p.card()`, `p.pipe()`, `p.fields()`, `p.cardAttachments()`, `p.timezone()`, `p.locale` |
+| Storage | `p.set()`, `p.get()` |
+| Anexos | `p.attach()`, `p.detach()` |
+| UI | `p.sidebar()`, `p.closeSidebar()`, `p.modal()`, `p.closeModal()`, `p.openCard()`, `p.closeCard()`, `p.dropdown()`, `p.closeDropdown()`, `p.search()`, `p.showNotification()`, `PipefyApp.render()` |
+| API | `p.query()`, `p.mutation()` |
+| Auth | `p.getAuthToken()` (comunidade) |
+| Init | `PipefyApp.initCall()`, `p = PipefyApp.init()` |
+| Utils | `PipefyApp.Promise`, `PipefyApp.resizeTo(selector)` |
+| Manifest | **pipe-view** — exibir app dentro da view do pipe (ex.: Calendar) |
+
+---
+
+## Segurança e hosting
+
+- O app roda em **iframes** e deve ser servido por **HTTPS** em produção.
+- Em desenvolvimento local, use um túnel (ex.: ngrok, localtunnel) e aponte as URLs do app e do manifest em [app.pipefy.com/developers/apps](https://app.pipefy.com/developers/apps) para essa URL HTTPS.
+
+---
+
+## Referências
 
 - [Build your first Pipefy app](https://developers.pipefy.com/docs/build-your-first-pipefy-app)
 - [Manifest reference](https://developers.pipefy.com/docs/manifestjson)

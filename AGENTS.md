@@ -23,9 +23,9 @@ npm start                               # Start Server
 
 ### 1. Product & Architecture (Read First)
 - **Pipefy App**: definition and screens in `public/manifest.json`, `public/index.html`, `public/pipe-view.html`, `public/card-tab.html`.
-- **Cursor command**: `.cursor/commands/create-app.md` — workflow for app development.
-- **Skills**: `.cursor/skills/pipe-dev/SKILL.md` (developer), `.cursor/skills/pipe-frontend/SKILL.md` (UI/Design System).
-- **SDK documentation**: `docs/sdk.md` — Pipefy Apps SDK reference (initCall, pipe-view, card-tab, render, resizeTo, `p` API).
+- **SDK documentation**: `docs/sdk.md` — Pipefy Apps SDK reference (initCall, pipe-view, card-tab, render, resizeTo, `p` API). Single source for Cursor and Claude.
+- **Cursor**: commands in `.cursor/commands/` (e.g. `create-app.md`, `create-prd.md`); skills in `.cursor/skills/` (pipe-dev, pipe-frontend).
+- **Claude**: context in `.claude/CLAUDE.md`; rules (equivalent to skills + workflows) in `.claude/rules/` (pipe-dev, pipe-frontend, create-app, create-prd).
 
 ## Organization
 
@@ -49,17 +49,19 @@ Pipefy-APP-SDK-Boilerplate-main/
 │   ├── icons/                # Icons (e.g. MyLogo.png)
 │   └── screenshots/          # Screenshots for the marketplace
 │
+├── .claude/                  # Claude configuration
+│   ├── CLAUDE.md             # Project context for Claude
+│   └── rules/                # Rules = skills + workflows (pipe-dev, pipe-frontend, create-app, create-prd)
+│
 └── .cursor/                  # Cursor configuration
-    ├── commands/
-    │   └── create-app.md     # Command/workflow for the Pipefy app
-    └── skills/
-        ├── pipe-dev/SKILL.md
-        └── pipe-frontend/SKILL.md
+    ├── commands/             # create-app.md, create-prd.md
+    └── skills/               # pipe-dev, pipe-frontend (SKILL.md)
 ```
 
-### AI Toolbox (Available Capabilities)
-- **Commands**: `.cursor/commands/` (Workflows like `create-app`)
-- **Skills**: `.cursor/skills/` (Specialized agents for Frontend, Design, Developer)
+### AI Toolbox (Cursor + Claude)
+- **Docs (shared)**: `docs/sdk.md` — SDK reference for both agents.
+- **Cursor**: `.cursor/commands/` (workflows), `.cursor/skills/` (pipe-dev, pipe-frontend).
+- **Claude**: `.claude/CLAUDE.md` (context), `.claude/rules/` (pipe-dev, pipe-frontend, create-app, create-prd).
 
 ## Key Architectural Patterns
 

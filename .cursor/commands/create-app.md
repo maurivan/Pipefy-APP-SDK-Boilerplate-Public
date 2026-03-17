@@ -27,7 +27,7 @@ Create a working Pipefy App that implements the idea described in the user promp
 ## Mandatory References (priority order)
 
 1. **SDK documentation (first)** — Read and follow strictly:
-   - **`.cursor/docs/sdk.md`** — Pipefy Apps SDK: loading script, `manifest.json`, `init_url`, `PipefyApp.initCall()`, `pipe-view`, `card-tab`, `PipefyApp.init()`, `PipefyApp.render()`, `PipefyApp.resizeTo()`, and the `p` API. All app structure and SDK usage must match this document.
+   - **`docs/sdk.md`** — Pipefy Apps SDK: loading script, `manifest.json`, `init_url`, `PipefyApp.initCall()`, `pipe-view`, `card-tab`, `PipefyApp.init()`, `PipefyApp.render()`, `PipefyApp.resizeTo()`, and the `p` API. All app structure and SDK usage must match this document.
 
 2. **Frontend & Design (second)** — Apply for all UI and markup:
    - **`.cursor/skills/pipe-frontend/SKILL.md`** — PipeStyle, Lumen tokens, Tailwind, New Order font, enterprise UI, no generic AI aesthetics. Use for layout, components, and visual consistency.
@@ -48,7 +48,7 @@ Always prioritize **SDK doc** and **frontend skill** when there is any overlap o
    If the idea is too vague, ask exactly one short question to narrow scope (e.g. "Deve aparecer como aba no card, view no pipe, ou os dois?"). If it’s clear enough, do not ask.
 
 3. **Design the app shape from the SDK**  
-   Using **only** `.cursor/docs/sdk.md`:
+   Using **only** `docs/sdk.md`:
    - Decide where the app appears: **pipe-view**, **card-tab**, or both (and pipe-buttons/card-buttons if relevant).
    - Plan the init page: `init_url` → `public/index.html` + `public/index.js` with `PipefyApp.initCall({ 'pipe-view': ... }, { 'card-tab': ... })`.
    - Plan view/tab pages: `PipefyApp.init()`, `PipefyApp.render()`, and for card-tab `PipefyApp.resizeTo()`.
@@ -74,7 +74,7 @@ Always prioritize **SDK doc** and **frontend skill** when there is any overlap o
 
 ## Constraints
 
-- Do not invent SDK methods or manifest fields; use only what is described in **`.cursor/docs/sdk.md`** (and official links there if needed).
+- Do not invent SDK methods or manifest fields; use only what is described in **`docs/sdk.md`** (and official links there if needed).
 - Do not skip the frontend skill: all UI must use Lumen tokens and PipeStyle guidance from **`.cursor/skills/pipe-frontend/SKILL.md`**.
 - Keep the existing server and project layout: app lives in `public/`, entry is the init page, views/tabs are HTML (and JS/CSS) as in the boilerplate.
 - **Do not create `.env` or `.env.example`** files to configure a Pipefy token. Always use the session/cookie provided by the SDK (user is already authenticated in Pipefy).
